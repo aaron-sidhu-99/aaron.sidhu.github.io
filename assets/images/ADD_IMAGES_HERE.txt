@@ -1,0 +1,1 @@
+Place your headshot and project JPEG/PNG files in this folder. See ../README-FIRST.txt for instructions.
