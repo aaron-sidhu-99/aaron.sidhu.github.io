@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Design Portfolio — Your Name</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="index.html">YOUR NAME<span>.</span></a>
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="cv.html">CV</a>
+      <a class="active" href="portfolio.html">Design portfolio <span class="nav-arrow">↗</span></a>
+    </nav>
+  </header>
+
+  <main class="page-main">
+    <section class="page-intro">
+      <p class="eyebrow">SELECTED ENGINEERING WORK / 01—</p>
+      <h1>Design<br><em>portfolio.</em></h1>
+      <p class="page-lede">A visual record of projects, components, analysis and hardware development. Select an image to view it at a larger size.</p>
+    </section>
+
+    <div class="portfolio-toolbar">
+      <span id="project-count">SELECTED WORK</span>
+      <div class="filter-list" id="filters" aria-label="Filter projects"></div>
+    </div>
+    <div id="portfolio-projects" class="portfolio-list"></div>
+  </main>
+
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="lightbox-close" aria-label="Close image">×</button>
+    <button class="lightbox-prev" aria-label="Previous image">←</button>
+    <figure>
+      <img src="" alt="">
+      <figcaption></figcaption>
+    </figure>
+    <button class="lightbox-next" aria-label="Next image">→</button>
+  </div>
+
+  <footer class="site-footer">
+    <span>© <span id="year"></span> YOUR NAME</span>
+    <span>Mechanical design · Aerospace · Engineering</span>
+    <a href="mailto:your.email@example.com">Get in touch ↗</a>
+  </footer>
+  <script src="assets/js/projects.js"></script>
+  <script src="assets/js/site.js"></script>
+</body>
+</html>
