@@ -1,21 +1,25 @@
-# Aaron Sidhu - Engineering Portfolio
+# Aaron Sidhu - Chronological Engineering Portfolio
 
-A responsive, static portfolio site for GitHub Pages. Eight image-led case studies are organized around four browsing themes: space hardware, propulsion and test, industrial design, and academic concepts.
+A separate, static GitHub Pages edition of the portfolio, organized by employment and education period. The previously delivered non-chronological version remains unchanged.
 
 ## Publish
 
 1. Unzip this package.
-2. Upload the contents of the folder (not the enclosing folder) to the root of the GitHub Pages repository.
+2. Upload the contents of the folder (not the enclosing folder) to the root of a GitHub Pages repository.
 3. In GitHub, select **Settings > Pages**, choose deployment from the `main` branch and `/ (root)`.
-4. Check the published homepage, project galleries, category filters, and CV download.
+4. Open `index.html` and check the timeline, document downloads, images and keyboard-accessible image viewer.
 
 No build step, server, framework, or external library is required. All site assets are local.
 
 ## Pages
 
-- `index.html` - introduction and four featured case studies
-- `portfolio.html` - eight case studies, category filters, and image viewer
-- `cv.html` - embedded and downloadable CV
-- `PROJECT_STRUCTURE.md` - full project inventory and recommended presentation order
+- `index.html` - introduction and selected project highlights
+- `portfolio.html` - chronological project timeline
+- `cv.html` - CV page
+- `PROJECT_STRUCTURE.md` - timeline inventory and source-file notes
 
-Project pages use a consistent reading order: project and period, summary, role, source imagery, challenge, contribution, and outcome. Project images are shown without cropping so CAD and test detail remains visible.
+## Source-document notes
+
+- The IRP, GDP and Concrete Canvas placement portfolio/report PDFs are included under `assets/docs/`.
+- The COLIBRIS and VTC1.5 PDFs are clearly labeled excerpts from supplied YGT project slides; they are not conference proceedings.
+- The conference paper/presentation PDFs and YII poster file were not present in the supplied source materials, so the site does not label a substitute as those documents.
