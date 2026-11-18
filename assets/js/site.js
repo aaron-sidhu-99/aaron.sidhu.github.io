@@ -1,144 +1,29 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const year = document.getElementById("year");
-  if (year) year.textContent = new Date().getFullYear();
-
-  const imagePath = name => `assets/images/${name}`;
-
-  function makeImage(filename, alt, className = "") {
-    const img = document.createElement("img");
-    img.src = imagePath(filename);
-    img.alt = alt;
-    img.loading = "lazy";
-    img.className = className;
-    img.onerror = () => {
-      img.removeAttribute("src");
-      img.classList.add("missing-image");
-      img.alt = `Add image file: ${filename}`;
-      img.insertAdjacentHTML("afterend", `<span class="missing-label">ADD IMAGE<br><small>${filename}</small></span>`);
-    };
-    return img;
+(function(){
+  "use strict";
+  document.querySelectorAll(".year").forEach(function(el){el.textContent=String(new Date().getFullYear());});
+  var filterButtons=Array.from(document.querySelectorAll(".filter-button"));
+  var entries=Array.from(document.querySelectorAll(".project-entry"));
+  var count=document.getElementById("project-count");
+  var empty=document.getElementById("empty-state");
+  function applyFilter(category){
+    var visible=0;
+    entries.forEach(function(entry){var show=category==="all"||entry.dataset.category===category;entry.hidden=!show;if(show)visible++;});
+    if(count)count.textContent=visible+" SELECTED PROJECT"+(visible===1?"":"S");
+    if(empty)empty.hidden=visible!==0;
+    filterButtons.forEach(function(button){var active=button.dataset.filter===category;button.classList.toggle("active",active);button.setAttribute("aria-pressed",active?"true":"false");});
   }
-
-  const featured = document.getElementById("featured-projects");
-  if (featured && window.projects) {
-    projects.slice(0, 3).forEach((project, index) => {
-      const card = document.createElement("a");
-      card.className = `featured-card featured-${index + 1}`;
-      card.href = "portfolio.html";
-      const media = document.createElement("div");
-      media.className = "featured-media";
-      media.appendChild(makeImage(project.images[0], project.title));
-      const meta = document.createElement("div");
-      meta.className = "card-meta";
-      meta.innerHTML = `<span>${project.category}</span><span>${project.year}</span>`;
-      const title = document.createElement("h3");
-      title.textContent = project.title;
-      card.append(media, meta, title);
-      featured.appendChild(card);
-    });
-  }
-
-  const list = document.getElementById("portfolio-projects");
-  const filters = document.getElementById("filters");
-  const count = document.getElementById("project-count");
-  const lightbox = document.getElementById("lightbox");
-
-  if (!list || !window.projects) return;
-
-  const categories = ["All", ...new Set(projects.map(p => p.category))];
-  let activeFilter = "All";
-  let galleryImages = [];
-  let activeImage = 0;
-
-  function render() {
-    list.innerHTML = "";
-    const visible = projects.filter(p => activeFilter === "All" || p.category === activeFilter);
-    if (count) count.textContent = `${String(visible.length).padStart(2, "0")} PROJECTS`;
-    visible.forEach((project, index) => {
-      const section = document.createElement("section");
-      section.className = "project-section";
-      const heading = document.createElement("div");
-      heading.className = "project-heading";
-      heading.innerHTML = `<div class="project-index">${String(index + 1).padStart(2, "0")} / ${project.year}</div>`;
-      const titleBlock = document.createElement("div");
-      const title = document.createElement("h2");
-      title.textContent = project.title;
-      const description = document.createElement("p");
-      description.textContent = project.description;
-      titleBlock.append(title, description);
-      const category = document.createElement("span");
-      category.className = "project-category";
-      category.textContent = project.category;
-      heading.append(titleBlock, category);
-      const grid = document.createElement("div");
-      grid.className = "image-scrapbook";
-      project.images.forEach((filename, imageIndex) => {
-        const button = document.createElement("button");
-        button.className = `scrap-image scrap-${imageIndex % 4}`;
-        button.type = "button";
-        button.setAttribute("aria-label", `View ${project.title} image ${imageIndex + 1}`);
-        button.appendChild(makeImage(filename, `${project.title} — image ${imageIndex + 1}`));
-        button.addEventListener("click", () => openLightbox(project, imageIndex));
-        grid.appendChild(button);
-      });
-      section.append(heading, grid);
-      list.appendChild(section);
-    });
-  }
-
-  if (filters) {
-    categories.forEach(category => {
-      const button = document.createElement("button");
-      button.className = `filter-button${category === activeFilter ? " selected" : ""}`;
-      button.textContent = category;
-      button.addEventListener("click", () => {
-        activeFilter = category;
-        filters.querySelectorAll("button").forEach(b => b.classList.toggle("selected", b.textContent === category));
-        render();
-      });
-      filters.appendChild(button);
-    });
-  }
-
-  function openLightbox(project, imageIndex) {
-    galleryImages = project.images.map((filename, i) => ({
-      src: imagePath(filename),
-      alt: `${project.title} — image ${i + 1}`,
-      caption: `${project.title} · ${project.category} · ${project.year}`
-    }));
-    activeImage = imageIndex;
-    showLightbox();
-  }
-
-  function showLightbox() {
-    const item = galleryImages[activeImage];
-    const img = lightbox.querySelector("img");
-    img.src = item.src;
-    img.alt = item.alt;
-    lightbox.querySelector("figcaption").textContent = item.caption;
-    lightbox.classList.add("open");
-    lightbox.setAttribute("aria-hidden", "false");
-    document.body.classList.add("no-scroll");
-  }
-  function closeLightbox() {
-    lightbox.classList.remove("open");
-    lightbox.setAttribute("aria-hidden", "true");
-    document.body.classList.remove("no-scroll");
-  }
-  function moveLightbox(direction) {
-    activeImage = (activeImage + direction + galleryImages.length) % galleryImages.length;
-    showLightbox();
-  }
-  lightbox.querySelector(".lightbox-close").addEventListener("click", closeLightbox);
-  lightbox.querySelector(".lightbox-prev").addEventListener("click", () => moveLightbox(-1));
-  lightbox.querySelector(".lightbox-next").addEventListener("click", () => moveLightbox(1));
-  lightbox.addEventListener("click", e => { if (e.target === lightbox) closeLightbox(); });
-  document.addEventListener("keydown", e => {
-    if (!lightbox.classList.contains("open")) return;
-    if (e.key === "Escape") closeLightbox();
-    if (e.key === "ArrowLeft") moveLightbox(-1);
-    if (e.key === "ArrowRight") moveLightbox(1);
-  });
-
-  render();
-});
+  filterButtons.forEach(function(button){button.addEventListener("click",function(){applyFilter(button.dataset.filter);});});
+  var box=document.getElementById("lightbox");
+  if(!box)return;
+  var image=box.querySelector("img"),caption=box.querySelector("figcaption");
+  var closeButton=box.querySelector(".lightbox-close"),prevButton=box.querySelector(".lightbox-prev"),nextButton=box.querySelector(".lightbox-next");
+  var activeButtons=[],activeIndex=0,lastFocus=null;
+  function refreshGallery(){activeButtons=Array.from(document.querySelectorAll(".project-entry:not([hidden]) .gallery-image"));}
+  function showImage(index){if(!activeButtons.length)return;activeIndex=(index+activeButtons.length)%activeButtons.length;var b=activeButtons[activeIndex],thumb=b.querySelector("img");image.src=b.dataset.full;image.alt=thumb?thumb.alt:"Project image";caption.textContent=b.dataset.caption||"";}
+  function open(button){refreshGallery();activeIndex=activeButtons.indexOf(button);if(activeIndex<0){activeButtons=Array.from(document.querySelectorAll(".gallery-image"));activeIndex=activeButtons.indexOf(button);}lastFocus=button;showImage(activeIndex);box.setAttribute("aria-hidden","false");document.body.classList.add("viewer-open");closeButton.focus();}
+  function close(){box.setAttribute("aria-hidden","true");document.body.classList.remove("viewer-open");image.src="";if(lastFocus)lastFocus.focus();}
+  document.addEventListener("click",function(event){var b=event.target.closest(".gallery-image");if(b)open(b);});
+  closeButton.addEventListener("click",close);prevButton.addEventListener("click",function(){showImage(activeIndex-1);});nextButton.addEventListener("click",function(){showImage(activeIndex+1);});
+  box.addEventListener("click",function(event){if(event.target===box)close();});
+  document.addEventListener("keydown",function(event){if(box.getAttribute("aria-hidden")!=="false")return;if(event.key==="Escape")close();if(event.key==="ArrowLeft")showImage(activeIndex-1);if(event.key==="ArrowRight")showImage(activeIndex+1);if(event.key==="Tab"){var focusables=[closeButton,prevButton,nextButton];var first=focusables[0],last=focusables[focusables.length-1];if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}}});
+})();
