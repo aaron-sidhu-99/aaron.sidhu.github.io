@@ -8,7 +8,7 @@
   function applyFilter(category){
     var visible=0;
     entries.forEach(function(entry){var show=category==="all"||entry.dataset.category===category;entry.hidden=!show;if(show)visible++;});
-    if(count)count.textContent=visible+" SELECTED PROJECT"+(visible===1?"":"S");
+    if(count)count.textContent=visible+" CASE STUD"+(visible===1?"Y":"IES");
     if(empty)empty.hidden=visible!==0;
     filterButtons.forEach(function(button){var active=button.dataset.filter===category;button.classList.toggle("active",active);button.setAttribute("aria-pressed",active?"true":"false");});
   }
